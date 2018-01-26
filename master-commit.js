@@ -116,7 +116,7 @@ var drawColors = function(x, colour) {
     stroke(196, 187, 65);
     rect(x, 5, boxWidths, 40);
 };
-var isPainting = false; // boolean for when the mouse is in the canvas
+var isPainting = false; // boolean when the mouse is in the canvas
 background(backgroundColor);
 var draw = function() {
     // Sets default styles
