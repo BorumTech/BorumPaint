@@ -2,6 +2,7 @@
 /*** Features ***\
  * click your color you want to be the background, then click background - Choose your background first, when you choose, it goes over everything you have already drew
  * Click on a color to use to paint
+ * Many unique colors beyond the basics (All colors are standard HTML rgb Codes)
  * Use the extreme left arrows to adjust the thickness
  * Use the middle arrows to adjust the transperency
  * Erase with the Erase function (this really justs paints the background)
@@ -39,12 +40,52 @@ var yPos = 372; // y-position of opacityArrows
 var opacityUp = opacityDown + 35; // x-position of the opacity-up arrow
 var opacityA = 255; // How opaque, or how non-see through it is
 var Esize = 20; // Thickness of brush
-var spaceBetween = 35; // amount of pixels between each color box
-var boxWidths = 30; // width of each color box
+var spaceBetween = 32; // amount of pixels between each color box
+var boxWidths = 25; // width of each color box
 var currentColor;
 var bgOpacity;
 var backgroundColor = color(0, 0, 0);
-var colors = [color(255, 0, 0), color(255, 127, 0), color(255, 255, 0), color(0, 255, 0), color(0, 0, 255), color(127, 0, 255), color(255, 0, 255), color(255, 255, 255), color(75, 75, 75), color(0, 0, 0)]; // all colors you see at the top
+var colors = [
+    color(255, 0, 0), // Red
+    color(255, 165, 0), // Orange
+    color(255, 255, 0), // Yellow
+    color(0, 255, 0), // Lime
+    color(0, 128, 0), // Green
+    color(0, 0, 255), // Blue
+    color(128, 0, 128), // Purple
+    color(255, 0, 255), // Magenta
+    color(238,130,238), // Violet
+    color(255, 192, 203), // Pink
+    color(0, 0, 0), // Black
+    color(255, 255, 255), // White
+    color(128,128,128), // Grey/Gray
+    color(192, 192, 192), // Silver
+    color(178, 34, 34), 
+    color(64, 224, 208), // Turquoise
+    color(240, 230, 140), // Khaki 
+    color(158, 91, 64),
+    color(355, 77, 52) // Old Brick Red
+]; // all colors you see at the top
+var drawEraser = function() {
+   if(!drawEraser.init) {
+        drawEraser.eraser = {
+            x: 5,
+            y: 60,
+            w: boxWidths+25,
+            h: 40
+        };
+        drawEraser.init = true;
+    }
+    var eraser = drawEraser.eraser;
+    fill(255, 200, 255);
+   rect(eraser.x, eraser.y, eraser.w, eraser.h);
+};
+var checkColorMouseHover = function(i) {
+        return mouseX > i * spaceBetween + 5 && 
+        mouseX < i * spaceBetween + boxWidths && 
+        mouseY > 5 && 
+        mouseY < 45;
+};
 var textOverPaint = function() {
     textAlign(CENTER, CENTER);
     fill(255, 255, 255);
@@ -57,6 +98,8 @@ var textOverPaint = function() {
     textSize(12);
     text("Thickness:", 30, 354);
     text("Background", 120, 350);
+    fill(0, 0, 0);
+    text("ERASER", 29, 77);
 };
 var paintBrush = {
     x: 450,
@@ -76,10 +119,18 @@ var drawColors = function(x, colour) {
 var isPainting = false; // boolean for when the mouse is in the canvas
 background(backgroundColor);
 var draw = function() {
+    // Sets default styles
+    textAlign(CENTER, CENTER);
+    strokeWeight(1);
+    stroke(0,0,0);
+    
     currentColor = color(C, opacityA);
-    fill(0, 0, 0);
-    rect(0, 0, 400, 55);
-    rect(0, 315, 400, 85);
+    fill(0, 0, 0); // Black Box in Background for control center to not smear
+    rect(0, 315, 600, 85);
+    drawEraser();
+    noStroke();
+    fill(0,0,0);
+    rect(0, 0, width, 50);
     if (mouseIsPressed && mouseY > 60 && mouseY < 300) {
         isPainting = true;
     }
@@ -92,35 +143,32 @@ var draw = function() {
         paintBrush.y = mouseY;
     }
     for (var i = 0; i < colors.length; i++) {
+        var hover = colors[i];
+        if(checkColorMouseHover()) {
+            hover = noStroke();
+        }
         drawColors(i * spaceBetween + 5, colors[i]);
     }
-    drawColors(358, color(255, 200, 255));
-    fill(currentColor);
+    fill(currentColor); // Info Box
     noStroke();
-    rect(80, 320, Esize, Esize); // Info Box
+    rect(80, 320, Esize, Esize); 
     fill(255, 0, 0);
     text(Esize, 70, 355);
     text(opacityA, 140, 365);
     textSize(7);
     fill(0);
-    text("ERASER", 371, 25);
-    strokeWeight(2);
-    stroke(0, 0, 0);
-    line(0, 55, 400, 55);
-    line(0, 315, 400, 315);
-    noStroke();
     fill(topBox);
     rect(85, 340, 70, 20); // Background Box
     Esize = (Esize > 1) ? Esize - 1 : 1; // Logical Operator brush size over 1
     Esize = (Esize < 35) ? Esize + 1 : 35; // Logical Operator brush size under 35
     opacityA = (opacityA > 1) ? opacityA - 1 : 1; // Logical Operator opacity over 1
-    opacityA = (opacityA < 255) ? opacityA + 1 : 255; // Logic: keeps opacity under 255
+    opacityA = (opacityA < 255) ? opacityA + 1 : 255; // Logic: opacity under 255
     textOverPaint();
-    fill(un);
+    fill(un); // Increase Thickness Button
     stroke(255, 0, 255);
     rect(thicknessUp - 5, 365, 25, 35);
     triangle(thicknessUp, 395, thicknessUp, 370, thicknessUp + 15, 380);
-    fill(un2);
+    fill(un2); // Decrease Thickness Button
     rect(thicknessDown - 5, 365, 25, 35);
     triangle(thicknessDown, 380, thicknessDown + 15, 370, thicknessDown + 15, 395);
     fill(lightUpL);
@@ -132,17 +180,30 @@ var draw = function() {
     triangle(opacityDown, yPos + 15, opacityDown + 15, yPos + 5, opacityDown + 15, yPos + 30);
     fill(0, 217, 255);
     text("Opacity:", 105, 365);
-    if (mouseIsPressed && mouseY > yPos && mouseY < yPos + 35) {
+    strokeWeight(2);
+    stroke(255, 255, 255);
+    line(0, 55, width, 55); // Top Line that seperates picture from colors
+    
+    line(0, 315, 400, 315); // Bottom line that seperates picture from control center
+    if (mouseIsPressed && mouseY > yPos && mouseY < yPos + 35) { // Opacity Buttons Light Up
         if (mouseX > opacityDown - 5 && mouseX < opacityDown + 25) {
             opacityA--;
         } else if (mouseX > 135 && mouseX < 155) {
             opacityA++;
         }
     }
+    if(C === backgroundColor) {
+        noStroke();
+        fill(255, 200, 255);
+        rect(80, 320, 73,20);
+        fill(0,0,0);
+        textAlign(LEFT, TOP);
+        text("ERASER", 80, 320);
+    }
 };
 var mouseClicked = function() {
     for (var i = 0; i < colors.length; i++) {
-        if (mouseY > 5 && mouseY < 45 && mouseX > i * spaceBetween + 5 && mouseX < i * spaceBetween + boxWidths) {
+        if (checkColorMouseHover(i)) {
             C = colors[i];
             paintBrush.x = mouseX;
             paintBrush.y = mouseY;
@@ -162,7 +223,7 @@ var mouseClicked = function() {
             paintBrush.x = 500;
         }
     }
-    if (mouseX > 358 && mouseX < 358 + boxWidths && mouseY > 5 && mouseY < 40) { // Eraser selected
+    if (mouseX > drawEraser.eraser.x && mouseX < drawEraser.eraser.x + drawEraser.eraser.w && mouseY > drawEraser.eraser.y && mouseY < drawEraser.eraser.y + drawEraser.eraser.h) { // If Eraser selected
         C = backgroundColor;
     }
 };
