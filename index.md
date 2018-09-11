@@ -7,7 +7,7 @@ Welcome to the Paint a Picture page! Paint a picture is a program I made in proc
 ### Favicon ###
 
 <a href = "https://pixabay.com/photo-157342/" target = "_blank">
-	![paint and pallette](https://pixabay.com/photo-157342/)
+	![paint and pallette](https://cdn.pixabay.com/photo/2013/07/13/10/29/art-157342_960_720.png)
 </a>
 
 <script src = "https://rawgit.com/KnowledgeableKangaroo/KnowledgeableKangaroo.github.io/master/script.js"></script>
