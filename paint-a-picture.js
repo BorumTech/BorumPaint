@@ -1,6 +1,5 @@
-# paint-a-picture-backup
 /*** Features ***\
- * click your color you want to be the background, then click background - Choose your background first, when you choose, it goes over everything you have already drew
+ * Click your desired color (its outline changes color when you hover your mouse over it) that you want to be the background, then  * Click background - Choose your background first, when you choose, it goes over everything you have already drew
  * Click on a color to use to paint
  * Many unique colors beyond the basics (All colors are standard HTML rgb Codes)
  * Use the extreme left arrows to adjust the thickness
@@ -9,6 +8,7 @@
  * Shape functionality! You can now draw in ellipse, rectangle, and line
  * Press 1 to set the beginning of the line. Press 3 to set the end of the line
  Paint a Picture!
+      
       /*** Credits ***\
  * Larry Serflaten(*4) @LarrySeflaten
  * David Cossuu(*1) @C1d2
@@ -25,13 +25,15 @@ Get 10 votes - Complete!
 Get 15 votes - Complete!
 Get 20 votes - Complete!
 Get 25 votes - Complete!
-Get 45 votes - 
+Get 45 votes - Complete!
 Be number 1-10 on the Hot List - 
+
+Here is where I host it on github: https://github.com/KnowledgeableKangaroo/paint-a-picture-backup
 */
 // User Interaction: Making buttons light up by changing color
 var un; // thickness-down
 var un2; // thickness-up
-var topBox; // Background box
+var topBox = color(51, 51, 48); // Background box
 var lightUpL; // opacity-down box
 var lightUpR; // opacity-up box
 // No work needed after you adjust these
@@ -53,30 +55,41 @@ var paintBrush = {
 	y: 450
 };
 var pastPaintBrush = {
-    x: 200,
-    y: 200
+	x: 200,
+	y: 200
 };
-var shapeS = "";
-var pshape = 1; // Which shape is picked(1=ellipse,2=rect,3=line)
+var pshape = 0; // Which shape is picked(0=ellipse,1=rect,2=line)
+var shapes = [{
+		name: "Ellipse",
+		brush: function() {
+			ellipse(paintBrush.x, paintBrush.y, Esize, Esize);
+		}
+	},
+	{
+        name: "Quadrangle",
+        brush: function() {
+            rectMode(CENTER);
+		    rect(paintBrush.x, paintBrush.y, Esize, Esize);
+        }
+	},
+	{
+	    name: "Line",
+	    brush: function() {
+	        stroke(currentColor);
+	        strokeWeight(Esize);
+	        line(pastPaintBrush.x, pastPaintBrush.y, paintBrush.x, paintBrush.y);
+	    }
+	}
+];
+
 var drawBrush = function() {
-   
 	fill(currentColor);
 	noStroke();
-	if (pshape === 1) {
-	    shapeS = "ellipse";
-		ellipse(paintBrush.x, paintBrush.y, Esize, Esize);
-	}
-	else if(pshape === 2) {
-	    shapeS = "quadrangle";
-	    rectMode(CENTER);
-	    rect(paintBrush.x, paintBrush.y, Esize, Esize);
-	}
-	else if(pshape === 3) {
-	    shapeS = "line";
-	    stroke(currentColor);
-	    strokeWeight(Esize);
-	    line(pastPaintBrush.x, pastPaintBrush.y, paintBrush.x, paintBrush.y);
-	}
+	shapes.forEach(function (element, index) {
+	    if (pshape === index) {
+	        element.brush();
+	    }
+	});
 };
 var colors = [
 	color(255, 0, 0), // Red
@@ -160,15 +173,14 @@ var changeShape = new Button({
 	height: 47,
 	label: "Change Shape",
 	onClick: function() {
-		if(pshape === 3) {
-		    pshape = 1;
+		if (pshape === 2) {
+			pshape = 0;
+		} else {
+			pshape++;
 		}
-		else {
-		    pshape++;
-		}
+
 	},
 });
-
 var checkColorMouseHover = function(i) {
 	return mouseX > i * spaceBetween + 5 &&
 		mouseX < i * spaceBetween + boxWidths &&
@@ -189,19 +201,19 @@ var textOverPaint = function() {
 	text("Background", 120, 350);
 	fill(0, 0, 0);
 	text("ERASER", 29, 77);
-	fill(255, 0, 0);
-    text(pshape, 397,332);
 };
-var drawColors = function(x, colour) {
+var drawColors = function(x, colour, strokeColor) {
+	stroke(strokeColor);
 	fill(colour);
-	stroke(196, 187, 65);
 	rectMode(CORNER);
-	strokeWeight(1);
+	strokeWeight(1.5);
 	rect(x, 5, boxWidths, 40);
 };
-var isPainting = false; // boolean for when the mouse is in the canvas
+var isPainting = false; // true when the mouse is in the canvas
 background(backgroundColor);
 var draw = function() {
+	var topY = 55;
+	var bottomY = 310;
 	// Sets default styles
 	textAlign(CENTER, CENTER);
 	strokeWeight(1);
@@ -216,7 +228,7 @@ var draw = function() {
 	noStroke();
 	fill(0, 0, 0);
 	rect(0, 0, width, 50);
-	if (mouseIsPressed && mouseY > 60 && mouseY < 300) {
+	if (mouseIsPressed && mouseY > topY && mouseY < bottomY) {
 		isPainting = true;
 	} else {
 		isPainting = false;
@@ -229,27 +241,36 @@ var draw = function() {
 		pastPaintBrush.y = pmouseY;
 	}
 	for (var i = 0; i < colors.length; i++) {
-		var hover = colors[i];
-		if (checkColorMouseHover()) {
-			hover = noStroke();
-		}
-		drawColors(i * spaceBetween + 5, colors[i]);
+	    var strokeColor;
+	    if(checkColorMouseHover(i)) {
+		    strokeColor = color(255, 0, 0);
+	    }
+	    else {
+	        strokeColor = color(107, 96, 1);
+	    }
+	    drawColors(i * spaceBetween + 5, colors[i], strokeColor);
 	}
-	fill(currentColor); // Info Square
+	fill(currentColor);
 	noStroke();
-	rect(80, 320, Esize, Esize);
-	fill(255, 0, 0);
+	rect(80, 320, Esize, Esize); // Info Square
 	textSize(13);
+	textFont(createFont("carbon block"));
+	fill(212, 176, 212);
 	text(Esize, 70, 355); // Thickness
 	text(opacityA, 140, 365); // Opacity
+	shapes.forEach(function(element, index) {
+	    if (pshape === index) {
+	       text(element.name, 482, 322); 
+	    }
+	});
 	textSize(7);
 	fill(0);
 	fill(topBox);
 	rect(85, 340, 70, 20); // Background Box
-	Esize = (Esize > 1) ? Esize - 1 : 1; // Logical Operator brush size over 1
-	Esize = (Esize < 35) ? Esize + 1 : 35; // Logical Operator brush size under 35
-	opacityA = (opacityA > 1) ? opacityA - 1 : 1; // Logical Operator opacity over 1
-	opacityA = (opacityA < 255) ? opacityA + 1 : 255; // Logic: opacity under 255
+	Esize = (Esize > 1) ? Esize - 1 : 1; // Keeps brush size over 1
+	Esize = (Esize < 35) ? Esize + 1 : 35; // Keeps brush size under 35
+	opacityA = (opacityA > 1) ? opacityA - 1 : 1; // Keeps opacity over 1
+	opacityA = (opacityA < 255) ? opacityA + 1 : 255; // Keeps opacity under 255
 	textOverPaint();
 	fill(un); // Increase Thickness Button
 	stroke(255, 0, 255);
@@ -259,18 +280,18 @@ var draw = function() {
 	rect(thicknessDown - 5, 365, 25, 35);
 	triangle(thicknessDown, 380, thicknessDown + 15, 370, thicknessDown + 15, 395);
 	fill(lightUpL);
-	stroke(84, 73, 84);
+	stroke(84, 73, 84); // Decrease Opacity Button
 	rect(opacityUp - 5, yPos, 25, 35);
 	triangle(opacityUp, yPos + 30, opacityUp, yPos + 5, opacityUp + 15, yPos + 15);
-	fill(lightUpR);
+	fill(lightUpR); // Increase Opacity Button
 	rect(opacityDown - 5, yPos, 25, 35);
 	triangle(opacityDown, yPos + 15, opacityDown + 15, yPos + 5, opacityDown + 15, yPos + 30);
 	fill(0, 217, 255);
 	text("Opacity:", 105, 365);
 	strokeWeight(2);
 	stroke(255, 255, 255);
-	line(0, 55, width, 55); // Top Line that seperates picture from colors
-	line(0, 315, width, 315); // Bottom line that seperates picture from control center
+	line(0, topY, width, topY); // Top Line that seperates picture from colors
+	line(0, bottomY, width, bottomY); // Bottom line that seperates picture from control center
 	changeShape.draw();
 	changeShape.handleMouseHover();
 	if (mouseIsPressed && mouseY > yPos && mouseY < yPos + 35) { // Opacity Buttons Light Up
@@ -280,9 +301,6 @@ var draw = function() {
 			opacityA++;
 		}
 	}
-	textFont(createFont("carbon block"));
-	fill(255, 0, 0);
-	text(shapeS, 551,351);
 	if (C === backgroundColor) {
 		noStroke();
 		fill(255, 200, 255);
@@ -319,61 +337,34 @@ var mouseClicked = function() {
 	}
 	changeShape.handleMouseClick();
 };
-var mouseMoved = function() {
-	if (mouseY > 365 && mouseY < 400) {
-		if (mouseX < 25) {
-			un2 = color(130, 116, 116);
-		} else {
-			un2 = color(255, 255, 255);
-		}
-		if (mouseX > 35 && mouseX < 60) {
-			un = color(130, 116, 116);
-		} else {
-			un = color(255, 255, 255);
-		}
-	} else {
-		un = color(255, 255, 255);
-		un2 = color(255, 255, 255);
-	}
-	if (mouseX > 85 && mouseX < 155 && mouseY > 340 && mouseY < 360) {
-		topBox = color(205, 195, 205, 150);
-	} else {
-		topBox = color(75, 75, 75);
-	} // Background is clicked
-	if (mouseY > yPos && mouseY < yPos + 35) {
-		if (mouseX > opacityDown - 5 && mouseX < opacityDown + 25) {
-			lightUpR = color(155, 145, 155);
-		} else if (mouseX > 135 && mouseX < 155) {
-			lightUpL = color(155, 145, 155);
-		} else {
-			lightUpL = lightUpR = color(255, 255, 255);
-		}
-	} else {
-		lightUpL = lightUpR = color(255, 255, 255);
-	}
-};
-var mouseOut = function() {
-	isPainting = false;
-};
+
 var mouseX1 = 0;
 var mouseY1 = 0;
 var mouseX2 = 0;
 var mouseY2 = 0;
-var keyPressed = function() { 
-    switch(key.toString()) {
-    case "1" :
-        mouseX1 = mouseX;
-        mouseY1 = mouseY;
-        break;
-    case "2" :
-        break;
-    case "3" :
-        mouseX1 = mouseX2;
-        mouseY1 = mouseY2;
-        stroke(currentColor);
-        strokeWeight(Esize);
-        line(mouseX1, mouseY1, mouseX, mouseY);
-    }
-    mouseX2 = mouseX;
-    mouseY2 = mouseY;
-}; 
+var keyPressed = function() {
+	switch (key.toString()) {
+		case "1":
+			mouseX1 = mouseX;
+			mouseY1 = mouseY;
+			break;
+		case "2":
+			break;
+		case "3":
+			mouseX1 = mouseX2;
+			mouseY1 = mouseY2;
+			stroke(currentColor);
+			strokeWeight(Esize);
+			if (pshape === 2) {
+				line(mouseX1, mouseY1, mouseX, mouseY);
+			}
+			if (pshape === 1) {
+				rectMode(CORNER);
+				noStroke();
+				fill(currentColor);
+				rect(mouseX1, mouseY1, mouseX - mouseX1, mouseY - mouseY1);
+			}
+	}
+	mouseX2 = mouseX;
+	mouseY2 = mouseY;
+};
