@@ -1,40 +1,14 @@
-/*** Features ***\
- * Click your desired color (its outline changes color when you hover your mouse over it) that you want to be the background, then  * Click background - Choose your background first, when you choose, it goes over everything you have already drew
- * Click on a color to use to paint
- * Many unique colors beyond the basics (All colors are standard HTML rgb Codes)
- * Use the extreme left arrows to adjust the thickness
- * Use the middle arrows to adjust the transperency
- * Erase with the Eraser (this really justs paints the background)
- * Shape functionality! You can now draw in ellipse, rectangle, and line
- * Press 1 to set the beginning of the line. Press 3 to set the end of the line
- Paint a Picture!
-      
-      /*** Credits ***\
- * Larry Serflaten(*4) @LarrySeflaten
- * David Cossuu(*1) @C1d2
- * Blue Leaf(*2) @BlueLeafStudio
- * Crystal Str #PrayForZoes @CrystalStr
- * Zachary(*1) @ZHilgeman
- * Ashwin (*2)@shwin320 for the shape functionality and for helping me with the eraser functionality
- * Varun (me) @LanguageNovice
- * Look at all my projects and subscribe!
-https://www.khanacademy.org/profile/DeterminedProgrammer101/projects
-https://www.khanacademy.org/computer-programming/logo-and-subsription/4516929514897408
-        /*** Goals ***\
-Get 10 votes - Complete!
-Get 15 votes - Complete!
-Get 20 votes - Complete!
-Get 25 votes - Complete!
-Get 45 votes - Complete!
-Be number 1-10 on the Hot List - 
-
-Here is where I host it on github: https://github.com/KnowledgeableKangaroo/paint-a-picture-backup
-*/
+    // Get the canvas that ProcessingJS will use
+  var canvas = document.getElementById("mycanvas"); 
+var sketchProc = function(processingInstance) {
+ with (processingInstance) {
+    size(600, 400); 
+    frameRate(30);
 // User Interaction: Making buttons light up by changing color
 var un; // thickness-down
 var un2; // thickness-up
 var topBox = color(51, 51, 48); // Background box
-var lightUpL = color(255, 255, 255); // opacity-down box
+var lightUpL; // opacity-down box
 var lightUpR; // opacity-up box
 // No work needed after you adjust these
 var thicknessDown = 5; // left thicknessX
@@ -49,7 +23,7 @@ var boxWidths = 25; // width of each color box
 var currentColor;
 var bgOpacity;
 var C;
-var backgroundColor = color(0, 0, 0);
+var bgColor = color(0, 0, 0);
 var paintBrush = {
 	x: 450,
 	y: 450
@@ -86,8 +60,9 @@ var drawBrush = function() {
 	fill(currentColor);
 	noStroke();
 	shapes.forEach(function (element, index) {
-	    if (pshape === index) {
+	    if (pshape == index) {
 	        element.brush();
+	        console.log(1);
 	    }
 	});
 };
@@ -136,9 +111,7 @@ var Button = function(config) {
 	this.onClick = config.onClick || function() {};
 	this.defaultColor = color(242, 228, 228);
 	this.newColor = color(227, 118, 227);
-	this.Color = this.defaultColor;
 };
-
 Button.prototype.draw = function() {
 	fill(this.Color);
 	rect(this.x, this.y, this.width, this.height, 5);
@@ -210,7 +183,8 @@ var drawColors = function(x, colour, strokeColor) {
 	rect(x, 5, boxWidths, 40);
 };
 var isPainting = false; // true when the mouse is in the canvas
-background(backgroundColor);
+
+background(bgColor);
 var draw = function() {
 	var topY = 55;
 	var bottomY = 310;
@@ -228,7 +202,7 @@ var draw = function() {
 	noStroke();
 	fill(0, 0, 0);
 	rect(0, 0, width, 50);
-	if (mouseIsPressed && mouseY > topY && mouseY < bottomY) {
+	if (__mousePressed && mouseY > topY && mouseY < bottomY) {
 		isPainting = true;
 	} else {
 		isPainting = false;
@@ -279,17 +253,13 @@ var draw = function() {
 	fill(un2); // Decrease Thickness Button
 	rect(thicknessDown - 5, 365, 25, 35);
 	triangle(thicknessDown, 380, thicknessDown + 15, 370, thicknessDown + 15, 395);
-	if (mouseX < opacityDown - 5 && mouseX > opacityDown + 25 && mouseY >= yPos && mouseY <= yPos + 35) {
-        fill(255, 0, 0);
-        println(10);
-    }
 	fill(lightUpL);
 	stroke(84, 73, 84); // Decrease Opacity Button
 	rect(opacityUp - 5, yPos, 25, 35);
 	triangle(opacityUp, yPos + 30, opacityUp, yPos + 5, opacityUp + 15, yPos + 15);
 	fill(lightUpR); // Increase Opacity Button
-	rect(opacityDown, yPos, 25, 35);
-	triangle(opacityDown + 5, yPos + 15, opacityDown + 20, yPos + 5, opacityDown + 20, yPos + 30);
+	rect(opacityDown - 5, yPos, 25, 35);
+	triangle(opacityDown, yPos + 15, opacityDown + 15, yPos + 5, opacityDown + 15, yPos + 30);
 	fill(0, 217, 255);
 	text("Opacity:", 105, 365);
 	strokeWeight(2);
@@ -298,14 +268,14 @@ var draw = function() {
 	line(0, bottomY, width, bottomY); // Bottom line that seperates picture from control center
 	changeShape.draw();
 	changeShape.handleMouseHover();
-	if (mouseIsPressed && mouseY > yPos && mouseY < yPos + 35) { // Opacity Buttons Light Up
+	if (__mousePressed && mouseY > yPos && mouseY < yPos + 35) { // Opacity Buttons Light Up
 		if (mouseX > opacityDown - 5 && mouseX < opacityDown + 25) {
 			opacityA--;
 		} else if (mouseX > 135 && mouseX < 155) {
 			opacityA++;
 		}
 	}
-	if (C === backgroundColor) {
+	if (C === bgColor) {
 		noStroke();
 		fill(255, 200, 255);
 		rect(80, 320, 73, 20);
@@ -322,8 +292,8 @@ var mouseClicked = function() {
 			paintBrush.y = mouseY;
 		} // if any of the colors are pressed
 		if (mouseX > 85 && mouseX < 155 && mouseY > 340 && mouseY < 360) {
-			backgroundColor = color(C, opacityA);
-			background(backgroundColor);
+			bgColor = color(C, opacityA);
+			background(bgColor);
 		} // Background is clicked
 	}
 	if (mouseY > 365 && mouseY < 400) { // Change thickness
@@ -337,7 +307,7 @@ var mouseClicked = function() {
 		}
 	}
 	if (mouseX > drawEraser.eraser.x && mouseX < drawEraser.eraser.x + drawEraser.eraser.w && mouseY > drawEraser.eraser.y && mouseY < drawEraser.eraser.y + drawEraser.eraser.h) { // If Eraser selected
-		C = backgroundColor;
+		C = bgColor;
 	}
 	changeShape.handleMouseClick();
 };
@@ -372,6 +342,7 @@ var keyPressed = function() {
 	mouseX2 = mouseX;
 	mouseY2 = mouseY;
 };
+
 var mouseMoved = function() {	
 	if (mouseY > 365 && mouseY < 400) {	
 		if (mouseX < 25) {	
@@ -408,4 +379,9 @@ var mouseMoved = function() {
 var mouseOut = function() {	
 	isPainting = false;	
 };
+}
+    
+};
+  // Pass the function to ProcessingJS constructor
+  var processingInstance = new Processing(canvas, sketchProc); 
 
