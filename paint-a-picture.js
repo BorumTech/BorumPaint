@@ -1,17 +1,3 @@
-<!DOCTYPE html>
-<html> 
-  <head>
-    <title>Paint A Picture</title> 
-  </head>
-  <body>
-	<!--This draws the canvas on the webpage -->
-    <canvas id="mycanvas"></canvas> 
-  </body>
- 
-  <!-- Include the processing.js library -->
-  <!-- See https://khanacademy.zendesk.com/hc/en-us/articles/202260404-What-parts-of-ProcessingJS-does-Khan-Academy-support- for differences -->
-  <script src="https://cdn.jsdelivr.net/processing.js/1.4.8/processing.min.js"></script> 
-  <script>
 /*** Features ***\
  * Click your desired color (its outline changes color when you hover your mouse over it) that you want to be the background, then  * Click background - Choose your background first, when you choose, it goes over everything you have already drew
  * Click on a color to use to paint
@@ -421,3 +407,8 @@ var keyPressed = function() {
 	mouseY2 = mouseY;
 };
 }};
+
+  // Get the canvas that ProcessingJS will use
+  var canvas = document.getElementById("mycanvas"); 
+  // Pass the function to ProcessingJS constructor
+  var processingInstance = new Processing(canvas, sketchProc); 
