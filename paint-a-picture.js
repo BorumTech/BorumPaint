@@ -1,3 +1,17 @@
+<!DOCTYPE html>
+<html> 
+  <head>
+    <title>Paint A Picture</title> 
+  </head>
+  <body>
+	<!--This draws the canvas on the webpage -->
+    <canvas id="mycanvas"></canvas> 
+  </body>
+ 
+  <!-- Include the processing.js library -->
+  <!-- See https://khanacademy.zendesk.com/hc/en-us/articles/202260404-What-parts-of-ProcessingJS-does-Khan-Academy-support- for differences -->
+  <script src="https://cdn.jsdelivr.net/processing.js/1.4.8/processing.min.js"></script> 
+  <script>
 /*** Features ***\
  * Click your desired color (its outline changes color when you hover your mouse over it) that you want to be the background, then  * Click background - Choose your background first, when you choose, it goes over everything you have already drew
  * Click on a color to use to paint
@@ -19,6 +33,43 @@
  * Varun (me) @LanguageNovice
  * Look at all my projects and subscribe!
 https://www.khanacademy.org/profile/MarvelousMoose/projects
+https://www.khanacademy.org/computer-programming/logo-and-subsription/4516929514897408
+        /*** Goals ***\
+Get 10 votes - Complete!
+Get 15 votes - Complete!
+Get 20 votes - Complete!
+Get 25 votes - Complete!
+Get 45 votes - Complete!
+Be number 1-10 on the Hot List - 
+
+Here is where I host it on github: https://github.com/KnowledgeableKangaroo/paint-a-picture-backup
+*/
+// User Interaction: Making buttons light up by changing color
+var sketchProc = function(processingInstance) {
+ with (processingInstance) {
+    size(600, 400); 
+    frameRate(60);
+    /*** Features ***\
+ * Click your desired color (its outline changes color when you hover your mouse over it) that you want to be the background, then  * Click background - Choose your background first, when you choose, it goes over everything you have already drew
+ * Click on a color to use to paint
+ * Many unique colors beyond the basics (All colors are standard HTML rgb Codes)
+ * Use the extreme left arrows to adjust the thickness
+ * Use the middle arrows to adjust the transperency
+ * Erase with the Eraser (this really justs paints the background)
+ * Shape functionality! You can now draw in ellipse, rectangle, and line
+ * Press 1 to set the beginning of the line. Press 3 to set the end of the line
+ Paint a Picture!
+      
+      /*** Credits ***\
+ * Larry Serflaten(*4) @LarrySeflaten
+ * David Cossuu(*1) @C1d2
+ * Blue Leaf(*2) @BlueLeafStudio
+ * Crystal Str #PrayForZoes @CrystalStr
+ * Zachary(*1) @ZHilgeman
+ * Ashwin (*2)@shwin320 for the shape functionality and for helping me with the eraser functionality
+ * Varun (me) @LanguageNovice
+ * Look at all my projects and subscribe!
+https://www.khanacademy.org/profile/DeterminedProgrammer101/projects
 https://www.khanacademy.org/computer-programming/logo-and-subsription/4516929514897408
         /*** Goals ***\
 Get 10 votes - Complete!
@@ -90,6 +141,7 @@ var drawBrush = function() {
 	        element.brush();
 	    }
 	});
+	console.log(1);
 };
 var colors = [
 	color(255, 0, 0), // Red
@@ -228,7 +280,7 @@ var draw = function() {
 	noStroke();
 	fill(0, 0, 0);
 	rect(0, 0, width, 50);
-	if (mouseIsPressed && mouseY > topY && mouseY < bottomY) {
+	if (mousePressed && mouseY > topY && mouseY < bottomY) {
 		isPainting = true;
 	} else {
 		isPainting = false;
@@ -294,7 +346,7 @@ var draw = function() {
 	line(0, bottomY, width, bottomY); // Bottom line that seperates picture from control center
 	changeShape.draw();
 	changeShape.handleMouseHover();
-	if (mouseIsPressed && mouseY > yPos && mouseY < yPos + 35) { // Opacity Buttons Light Up
+	if (mousePressed && mouseY > yPos && mouseY < yPos + 35) { // Opacity Buttons Light Up
 		if (mouseX > opacityDown - 5 && mouseX < opacityDown + 25) {
 			opacityA--;
 		} else if (mouseX > 135 && mouseX < 155) {
@@ -368,3 +420,4 @@ var keyPressed = function() {
 	mouseX2 = mouseX;
 	mouseY2 = mouseY;
 };
+}};
