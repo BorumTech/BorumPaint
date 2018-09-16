@@ -6,7 +6,7 @@ The application consists of many features, which can be found [on my Khan Academ
 
 <canvas id = "mycanvas"></canvas>
 
-<button onclick = "goToHomePage()" type = "button"> Home </button>
+<button onclick = "goToHomePage()" type = "button" style = "width: 30%;"> Home </button>
 
 ## Attributions ##
 
