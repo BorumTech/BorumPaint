@@ -18,5 +18,5 @@ The application consists of many features, which can be found [on my Khan Academ
 
 <script src="https://cdn.jsdelivr.net/processing.js/1.4.8/processing.min.js"></script> 
 <script src = "paint-a-picture.js"></script>
-<script src = "https://rawgit.com/KnowledgeableKangaroo/KnowledgeableKangaroo.github.io/master/script.js"></script>
+<script src = "https://cdn.rawgit.com/KnowledgeableKangaroo/KnowledgeableKangaroo.github.io/dcd2ad4/script.js"></script>
 
