@@ -1,39 +1,39 @@
     // Get the canvas that ProcessingJS will use
-  var canvas = document.getElementById("mycanvas"); 
-var sketchProc = function(processingInstance) {
+  let canvas = document.getElementById("mycanvas"); 
+let sketchProc = function(processingInstance) {
  with (processingInstance) {
     size(600, 400); 
     frameRate(30);
 // User Interaction: Making buttons light up by changing color
-var un; // thickness-down
-var un2; // thickness-up
-var topBox = color(51, 51, 48); // Background box
-var lightUpL; // opacity-down box
-var lightUpR; // opacity-up box
+let un; // thickness-down
+let un2; // thickness-up
+let topBox = color(51, 51, 48); // Background box
+let lightUpL; // opacity-down box
+let lightUpR; // opacity-up box
 // No work needed after you adjust these
-var thicknessDown = 5; // left thicknessX
-var thicknessUp = thicknessDown + 35;
-var opacityDown = 105; // x-position of the opacity-down arrow
-var yPos = 372; // y-position of opacityArrows
-var opacityUp = opacityDown + 35; // x-position of the opacity-up arrow
-var opacityA = 255; // How opaque, or how non-see through it is
-var Esize = 20; // Thickness of brush
-var spaceBetween = 32; // amount of pixels between each color box
-var boxWidths = 25; // width of each color box
-var currentColor;
-var bgOpacity;
-var C;
-var bgColor = color(0, 0, 0);
-var paintBrush = {
+let thicknessDown = 5; // left thicknessX
+let thicknessUp = thicknessDown + 35;
+let opacityDown = 105; // x-position of the opacity-down arrow
+let yPos = 372; // y-position of opacityArrows
+let opacityUp = opacityDown + 35; // x-position of the opacity-up arrow
+let opacityA = 255; // How opaque, or how non-see through it is
+let Esize = 20; // Thickness of brush
+let spaceBetween = 32; // amount of pixels between each color box
+let boxWidths = 25; // width of each color box
+let currentColor;
+let bgOpacity;
+let C;
+let bgColor = color(0, 0, 0);
+let paintBrush = {
 	x: 450,
 	y: 450
 };
-var pastPaintBrush = {
+let pastPaintBrush = {
 	x: 200,
 	y: 200
 };
-var pshape = 0; // Which shape is picked(0=ellipse,1=rect,2=line)
-var shapes = [{
+let pshape = 0; // Which shape is picked(0=ellipse,1=rect,2=line)
+let shapes = [{
 		name: "Ellipse",
 		brush: function() {
 			ellipse(paintBrush.x, paintBrush.y, Esize, Esize);
@@ -56,7 +56,7 @@ var shapes = [{
 	}
 ];
 
-var drawBrush = function() {
+let drawBrush = function() {
 	fill(currentColor);
 	noStroke();
 	shapes.forEach(function (element, index) {
@@ -66,7 +66,7 @@ var drawBrush = function() {
 	    }
 	});
 };
-var colors = [
+let colors = [
 	color(255, 0, 0), // Red
 	color(255, 165, 0), // Orange
 	color(255, 255, 0), // Yellow
@@ -87,7 +87,7 @@ var colors = [
 	color(158, 91, 64),
 	color(355, 77, 52) // Old Brick Red
 ]; // all colors you see at the top
-var drawEraser = function() {
+let drawEraser = function() {
 	if (!drawEraser.init) {
 		drawEraser.eraser = {
 			x: 5,
@@ -97,49 +97,55 @@ var drawEraser = function() {
 		};
 		drawEraser.init = true;
 	}
-	var eraser = drawEraser.eraser;
+	let eraser = drawEraser.eraser;
 	fill(255, 200, 255);
 	rect(eraser.x, eraser.y, eraser.w, eraser.h);
 };
 
-var Button = function(config) {
-	this.x = config.x || 0;
-	this.y = config.y || 0;
-	this.width = config.width || 150;
-	this.height = config.height || 50;
-	this.label = config.label || "Click";
-	this.onClick = config.onClick || function() {};
-	this.defaultColor = color(242, 228, 228);
-	this.newColor = color(227, 118, 227);
-};
-Button.prototype.draw = function() {
-	fill(this.Color);
-	rect(this.x, this.y, this.width, this.height, 5);
-	fill(0, 0, 0);
-	textSize(16);
-	textAlign(CENTER, CENTER);
-	text(this.label, this.x, this.y, this.width, this.height);
-};
-Button.prototype.isMouseInside = function() {
-	return mouseX > this.x &&
-		mouseX < (this.x + this.width) &&
-		mouseY > this.y &&
-		mouseY < (this.y + this.height);
-};
-Button.prototype.handleMouseClick = function() {
-	if (this.isMouseInside()) {
-		this.onClick();
+class Button {
+	constructor(config) {
+		this.x = config.x || 0;
+		this.y = config.y || 0;
+		this.width = config.width || 150;
+		this.height = config.height || 50;
+		this.label = config.label || "Click";
+		this.onClick = config.onClick || function() {};
+		this.defaultColor = color(242, 228, 228);
+		this.newColor = color(227, 118, 227);
 	}
-};
-Button.prototype.handleMouseHover = function() {
-	if (this.isMouseInside()) {
-		this.Color = this.newColor;
-	} else {
-		this.Color = this.defaultColor;
-	}
-};
 
-var changeShape = new Button({
+	draw() {
+		fill(this.Color);
+		rect(this.x, this.y, this.width, this.height, 5);
+		fill(0, 0, 0);
+		textSize(16);
+		textAlign(CENTER, CENTER);
+		text(this.label, this.x, this.y, this.width, this.height);
+	}
+
+	isMouseInside() {
+		return mouseX > this.x &&
+			mouseX < (this.x + this.width) &&
+			mouseY > this.y &&
+			mouseY < (this.y + this.height);		
+	}
+
+	handleMouseClick() {
+		if (this.isMouseInside()) {
+			this.onClick();
+		}
+	}
+
+	handleMouseHover() {
+		if (this.isMouseInside()) {
+			this.Color = this.newColor;
+		} else {
+			this.Color = this.defaultColor;
+		}
+	}
+}
+
+let changeShape = new Button({
 	x: width * 0.75,
 	y: 334,
 	width: 70,
@@ -154,13 +160,13 @@ var changeShape = new Button({
 
 	},
 });
-var checkColorMouseHover = function(i) {
+let checkColorMouseHover = function(i) {
 	return mouseX > i * spaceBetween + 5 &&
 		mouseX < i * spaceBetween + boxWidths &&
 		mouseY > 5 &&
 		mouseY < 45;
 };
-var textOverPaint = function() {
+let textOverPaint = function() {
 	textAlign(CENTER, CENTER);
 	fill(255, 255, 255);
 	textSize(20);
@@ -175,19 +181,19 @@ var textOverPaint = function() {
 	fill(0, 0, 0);
 	text("ERASER", 29, 77);
 };
-var drawColors = function(x, colour, strokeColor) {
+let drawColors = function(x, colour, strokeColor) {
 	stroke(strokeColor);
 	fill(colour);
 	rectMode(CORNER);
 	strokeWeight(1.5);
 	rect(x, 5, boxWidths, 40);
 };
-var isPainting = false; // true when the mouse is in the canvas
+let isPainting = false; // true when the mouse is in the canvas
 
 background(bgColor);
-var draw = function() {
-	var topY = 55;
-	var bottomY = 310;
+let draw = function() {
+	let topY = 55;
+	let bottomY = 310;
 	// Sets default styles
 	textAlign(CENTER, CENTER);
 	strokeWeight(1);
@@ -214,8 +220,8 @@ var draw = function() {
 		pastPaintBrush.x = pmouseX;
 		pastPaintBrush.y = pmouseY;
 	}
-	for (var i = 0; i < colors.length; i++) {
-	    var strokeColor;
+	for (let i = 0; i < colors.length; i++) {
+	    let strokeColor;
 	    if(checkColorMouseHover(i)) {
 		    strokeColor = color(255, 0, 0);
 	    }
@@ -284,8 +290,8 @@ var draw = function() {
 		text("ERASER", 80, 320);
 	}
 };
-var mouseClicked = function() {
-	for (var i = 0; i < colors.length; i++) {
+let mouseClicked = function() {
+	for (let i = 0; i < colors.length; i++) {
 		if (checkColorMouseHover(i)) {
 			C = colors[i];
 			paintBrush.x = mouseX;
@@ -312,11 +318,11 @@ var mouseClicked = function() {
 	changeShape.handleMouseClick();
 };
 
-var mouseX1 = 0;
-var mouseY1 = 0;
-var mouseX2 = 0;
-var mouseY2 = 0;
-var keyPressed = function() {
+let mouseX1 = 0;
+let mouseY1 = 0;
+let mouseX2 = 0;
+let mouseY2 = 0;
+let keyPressed = function() {
 	switch (key.toString()) {
 		case "1":
 			mouseX1 = mouseX;
@@ -343,7 +349,7 @@ var keyPressed = function() {
 	mouseY2 = mouseY;
 };
 
-var mouseMoved = function() {	
+let mouseMoved = function() {	
 	if (mouseY > 365 && mouseY < 400) {	
 		if (mouseX < 25) {	
 			un2 = color(130, 116, 116);	
@@ -376,12 +382,12 @@ var mouseMoved = function() {
 		lightUpL = lightUpR = color(255, 255, 255);	
 	}	
 };	
-var mouseOut = function() {	
+let mouseOut = function() {	
 	isPainting = false;	
 };
 }
     
 };
   // Pass the function to ProcessingJS constructor
-  var processingInstance = new Processing(canvas, sketchProc); 
+  let processingInstance = new Processing(canvas, sketchProc); 
 
