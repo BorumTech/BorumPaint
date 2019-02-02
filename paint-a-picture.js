@@ -191,7 +191,7 @@ let drawColors = function(x, colour, strokeColor) {
 let isPainting = false; // true when the mouse is in the canvas
 
 background(bgColor);
-let draw = function() {
+draw = function() {
 	let topY = 55;
 	let bottomY = 310;
 	// Sets default styles
@@ -290,7 +290,7 @@ let draw = function() {
 		text("ERASER", 80, 320);
 	}
 };
-let mouseClicked = function() {
+mouseClicked = function() {
 	for (let i = 0; i < colors.length; i++) {
 		if (checkColorMouseHover(i)) {
 			C = colors[i];
@@ -322,7 +322,7 @@ let mouseX1 = 0;
 let mouseY1 = 0;
 let mouseX2 = 0;
 let mouseY2 = 0;
-let keyPressed = function() {
+keyPressed = function() {
 	switch (key.toString()) {
 		case "1":
 			mouseX1 = mouseX;
@@ -349,7 +349,7 @@ let keyPressed = function() {
 	mouseY2 = mouseY;
 };
 
-let mouseMoved = function() {	
+mouseMoved = function() {	
 	if (mouseY > 365 && mouseY < 400) {	
 		if (mouseX < 25) {	
 			un2 = color(130, 116, 116);	
@@ -382,7 +382,7 @@ let mouseMoved = function() {
 		lightUpL = lightUpR = color(255, 255, 255);	
 	}	
 };	
-let mouseOut = function() {	
+mouseOut = function() {	
 	isPainting = false;	
 };
 }
