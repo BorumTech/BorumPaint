@@ -18,5 +18,8 @@ The application consists of many features, which can be found [on my Khan Academ
 
 <script src="https://cdn.jsdelivr.net/processing.js/1.4.8/processing.min.js"></script> 
 <script src = "paint-a-picture.js"></script>
-<script src = "https://cdn.jsdelivr.net/gh/KnowledgeableKangaroo/KnowledgeableKangaroo.github.io/script.js"></script>
+<script src = "../script.js"></script>
+<script>
+	createLinkElement('image/x-icon', 'shortcut icon', 'icon.ico');
+</script>
 
